@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -71,6 +72,7 @@ public class SurveyService {
         for (Survey survey : allSurveys) {
             response.add(unassignedSurveysResponse.builder()
                     .surveyId(survey.getSurveyId())
+                    .dateCreated(survey.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
                     .topic(survey.getTopic())
                     .build());
         }

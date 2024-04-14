@@ -10,5 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class unassignedSurveysResponse {
     private Long surveyId;
+    private String dateCreated;
     private String topic;
 }
