@@ -37,13 +37,14 @@ public class JwtService {
         return getToken(new HashMap<>(), user);
     }
 
-    public String getToken(Map<String, Object> extraClaims, User user) { // para obtener claims personalizados de la clase User reemplazamos UserDetails por la clase User creada manualmente
+    public String getToken(Map<String, Object> extraClaims, User user) {
         return Jwts
                 .builder()
                 .claims(extraClaims)
                 .claim("username", user.getFirstName())
                 .claim("lastname", user.getLastname())
                 .claim("address", user.getAddress())
+                .claim("role", user.getRole())
                 .claim("type", "ACCESS_TOKEN")
                 .subject(user.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))
@@ -70,7 +71,7 @@ public class JwtService {
             RefreshToken newToken = new RefreshToken();
             newToken.setToken(refreshToken);
             newToken.setUser(user);
-            newToken.setExpirationDate(new Date(System.currentTimeMillis() + 1000 * 60 * 5));
+            newToken.setExpirationDate(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 3));
             refreshTokenRepository.save(newToken);
         }
 

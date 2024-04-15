@@ -1,6 +1,7 @@
 package com.project.resiRed.service;
 
 import com.project.resiRed.dto.MessageDto;
+import com.project.resiRed.dto.QuestionDto.newQuestionResponse;
 import com.project.resiRed.dto.SurveyDto.createSurveyRequest;
 import com.project.resiRed.dto.SurveyDto.updateTopicRequest;
 import com.project.resiRed.dto.SurveyDto.unassignedSurveysResponse;
@@ -24,6 +25,7 @@ import org.springframework.data.domain.Sort;
 
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -32,6 +34,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class SurveyService {
     private final SurveyRepository surveyRepository;
@@ -119,7 +122,7 @@ public class SurveyService {
     }
 
 
-    public MessageDto addQuestiontoSurvey(Long surveyId, createQuestionRequest request) {
+    public newQuestionResponse addQuestiontoSurvey(Long surveyId, createQuestionRequest request) {
         Survey survey = surveyRepository.findById(surveyId).get();
         Question question = new Question();
         question.setDescription(request.getDescription());
@@ -134,8 +137,9 @@ public class SurveyService {
         }
         survey.getQuestions().add(question);
 
+        questionRepository.saveAndFlush(question);
         surveyRepository.save(survey);
 
-        return MessageDto.builder().detail("Question created").build();
+        return new newQuestionResponse(question.getQuestionId(), "Question added to Survey");
     }
 }

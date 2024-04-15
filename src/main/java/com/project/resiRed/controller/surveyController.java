@@ -1,6 +1,7 @@
 package com.project.resiRed.controller;
 
 
+import com.project.resiRed.dto.QuestionDto.newQuestionResponse;
 import com.project.resiRed.entity.Survey;
 import com.project.resiRed.service.SurveyService;
 import lombok.RequiredArgsConstructor;
@@ -143,7 +144,7 @@ public class surveyController {
     }
 
     @PostMapping(value = "{id}/add/question")
-    public  ResponseEntity<MessageDto> addQuestiontoSurvey(@PathVariable Long id, @RequestBody createQuestionRequest request){
+    public  ResponseEntity<newQuestionResponse> addQuestiontoSurvey(@PathVariable Long id, @RequestBody createQuestionRequest request){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null || !authentication.isAuthenticated()) {
@@ -159,9 +160,7 @@ public class surveyController {
             );
         } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
-                    MessageDto.builder().detail("Insufficient permissions").build());
+                    new newQuestionResponse(null, "Insufficient permissions"));
         }
-
     }
-
 }
